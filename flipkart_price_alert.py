@@ -15,9 +15,7 @@ pnmsg = "Below Rs. " + str(desired_price) + " you can get your Boat Headphone."
 def check_price():
     page = requests.get(url).text
     soup = BeautifulSoup(page, 'lxml')
-
     # print(soup.prettify())
-
 
     heading = soup.find('h1').text.strip()
     #print(heading)
@@ -25,7 +23,6 @@ def check_price():
     pattern = re.compile(r'₹\d+')
     search = pattern.findall(soup.prettify())
     price = int(search[0][1:])
-
 
     # VARIABLES FOR SENDING MAIL AND PUSH NOTIFICATION---------------------------------------
 
@@ -68,12 +65,10 @@ def check_price():
         send_mail()
         push_notification()
     
-
     else:
         count += 1
         print("Rechecking... Last checked at " + str(datetime.now()))
         print(count)
-
 
 count = 0
 while (True):
