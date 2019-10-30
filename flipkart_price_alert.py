@@ -41,7 +41,7 @@ def check_price():
         server.ehlo()
         server.starttls()
         server.ehlo()
-        server.login('senderemailaddress', 'emailpassword*')
+        server.login('senderemailaddress', 'emailpassword')
         subject = "Price of Boat Headphone has fallen down below Rs. " + str(desired_price)
         body = "Hey Rahul! \n The price of Boat Headphone on AMAZON has fallen down below Rs." + str(
             desired_price) + ".\n So, hurry up & check the amazon link right now : " + url
@@ -65,9 +65,9 @@ def check_price():
 
     count = 0
     if desired_price >= price:
-        # send_mail()
-        # push_notification()
-        pass
+        send_mail()
+        push_notification()
+    
 
     else:
         count += 1
@@ -80,5 +80,6 @@ while (True):
     count += 1
     print("Count : " + str(count))
     check_price()
+    #next alert in 3600Secs
     time.sleep(3600)
 
