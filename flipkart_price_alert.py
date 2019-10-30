@@ -15,9 +15,7 @@ pnmsg = "Below Rs. " + str(desired_price) + " you can get your Boat Headphone."
 def check_price():
     page = requests.get(url).text
     soup = BeautifulSoup(page, 'lxml')
-
     # print(soup.prettify())
-
 
     heading = soup.find('h1').text.strip()
     #print(heading)
@@ -25,7 +23,6 @@ def check_price():
     pattern = re.compile(r'₹\d+')
     search = pattern.findall(soup.prettify())
     price = int(search[0][1:])
-
 
     # VARIABLES FOR SENDING MAIL AND PUSH NOTIFICATION---------------------------------------
 
@@ -41,7 +38,7 @@ def check_price():
         server.ehlo()
         server.starttls()
         server.ehlo()
-        server.login('senderemailaddress', 'emailpassword*')
+        server.login('senderemailaddress', 'emailpassword')
         subject = "Price of Boat Headphone has fallen down below Rs. " + str(desired_price)
         body = "Hey Rahul! \n The price of Boat Headphone on AMAZON has fallen down below Rs." + str(
             desired_price) + ".\n So, hurry up & check the amazon link right now : " + url
@@ -65,20 +62,19 @@ def check_price():
 
     count = 0
     if desired_price >= price:
-        # send_mail()
-        # push_notification()
-        pass
-
+        send_mail()
+        push_notification()
+    
     else:
         count += 1
         print("Rechecking... Last checked at " + str(datetime.now()))
         print(count)
-
 
 count = 0
 while (True):
     count += 1
     print("Count : " + str(count))
     check_price()
+    #next alert in 3600Secs
     time.sleep(3600)
 
