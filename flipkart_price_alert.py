@@ -27,7 +27,7 @@ def check_price():
 try:
     response = urllib2.urlopen(r)
 except:
-    print "Internet connection error"  
+    print("Internet connection error")
 thePage = response.read()
 soup = bs4.BeautifulSoup(thePage)
 firstBlockSoup = soup.find('div', attrs={'class': 'fk-srch-item'})
