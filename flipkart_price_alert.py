@@ -1,4 +1,3 @@
-#Install all the packages using pip(windows terminal)
 from bs4 import BeautifulSoup
 import requests, time, smtplib
 from notify_run import Notify
@@ -24,16 +23,15 @@ def check_price():
     #search = pattern.findall(soup.prettify())
     #price = int(search[0][1:])
     r = urllib2.Request(url, headers={"User-Agent": "Python-urlli~"})
-try:
-    response = urllib2.urlopen(r)
-except:
-    print("Internet connection error")
-thePage = response.read()
-soup = bs4.BeautifulSoup(thePage)
-firstBlockSoup = soup.find('div', attrs={'class': 'fk-srch-item'})
-priceSoup=firstBlockSoup.find('b',attrs={'class':'fksd-bodytext price final-price'})
-price=priceSoup.contents[0]
-print(price)
+    try:
+      response = urllib2.urlopen(r)
+    except:
+      print("Internet connection error")
+      thePage = response.read()
+      soup = bs4.BeautifulSoup(thePage)
+      firstBlockSoup = soup.find('div', attrs={'class': 'fk-srch-item'})
+      price=priceSoup.contents[0]
+      print(price)
 
     # VARIABLES FOR SENDING MAIL AND PUSH NOTIFICATION---------------------------------------
 
@@ -88,4 +86,3 @@ while (True):
     check_price()
     #next alert in 3600Secs
     time.sleep(3600)
-
