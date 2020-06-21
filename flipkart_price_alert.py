@@ -4,7 +4,7 @@ import requests, time, smtplib
 from notify_run import Notify
 from datetime import datetime
 import re
-
+import urllib2
 #Product url link
 url = 'https://www.flipkart.com/satyam-weaves-paisley-banarasi-cotton-silk-saree/p/itmex2zuw8w4g7rr'
 #Desired Price, the price you want ot buy
@@ -20,9 +20,20 @@ def check_price():
     heading = soup.find('h1').text.strip()
     #print(heading)
 
-    pattern = re.compile(r'₹\d+')
-    search = pattern.findall(soup.prettify())
-    price = int(search[0][1:])
+    #pattern = re.compile(r'₹\d+')
+    #search = pattern.findall(soup.prettify())
+    #price = int(search[0][1:])
+    r = urllib2.Request(url, headers={"User-Agent": "Python-urlli~"})
+try:
+    response = urllib2.urlopen(r)
+except:
+    print "Internet connection error"  
+thePage = response.read()
+soup = bs4.BeautifulSoup(thePage)
+firstBlockSoup = soup.find('div', attrs={'class': 'fk-srch-item'})
+priceSoup=firstBlockSoup.find('b',attrs={'class':'fksd-bodytext price final-price'})
+price=priceSoup.contents[0]
+print(price)
 
     # VARIABLES FOR SENDING MAIL AND PUSH NOTIFICATION---------------------------------------
 
