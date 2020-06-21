@@ -1,88 +1,32 @@
-from bs4 import BeautifulSoup
-import requests, time, smtplib
-from notify_run import Notify
-from datetime import datetime
-import re
-import urllib
-#Product url link
-url = 'https://www.flipkart.com/satyam-weaves-paisley-banarasi-cotton-silk-saree/p/itmex2zuw8w4g7rr'
-#Desired Price, the price you want ot buy
-desired_price = 400
+import requests as r
+from bs4 import BeautifulSoup as bs
+import time
 
-pnmsg = "Below Rs. " + str(desired_price) + " you can get your Boat Headphone."
 
-def check_price():
-    page = requests.get(url).text
-    soup = BeautifulSoup(page, 'lxml')
-    # print(soup.prettify())
+URL = input("Enter Url")
 
-    heading = soup.find('h1').text.strip()
-    #print(heading)
-
-    #pattern = re.compile(r'₹\d+')
-    #search = pattern.findall(soup.prettify())
-    #price = int(search[0][1:])
-    r = urllib.Request(url, headers={"User-Agent": "Python-urlli~"})
-    try:
-      response = urllib.urlopen(r)
-    except:
-      print("Internet connection error")
-      thePage = response.read()
-      soup = bs4.BeautifulSoup(thePage)
-      firstBlockSoup = soup.find('div', attrs={'class': 'fk-srch-item'})
-      price=priceSoup.contents[0]
-      print(price)
-
-    # VARIABLES FOR SENDING MAIL AND PUSH NOTIFICATION---------------------------------------
-
-    print("NAME : " + heading)
-    print("CURRENT PRICE : " + str(price))
-    print("DESIRED PRICE : " + str(desired_price))
-
-    # Lets send the mail-----------------------------------------------------------------
-    # Go to https://myaccount.google.com/security and change Allow less secure apps to turn OFF
-
-    def send_mail():
-        server = smtplib.SMTP('smtp.gmail.com', 587)
-        server.ehlo()
-        server.starttls()
-        server.ehlo()
-        server.login('senderemailaddress', 'emailpassword')
-        subject = "Price of Boat Headphone has fallen down below Rs. " + str(desired_price)
-        body = "Hey Rahul! \n The price of Boat Headphone on AMAZON has fallen down below Rs." + str(
-            desired_price) + ".\n So, hurry up & check the amazon link right now : " + url
-        msg = f"Subject: {subject} \n\n {body} "
-        server.sendmail(
-            'senderemailaddress',
-            'recieveremailaddress', msg
-        )
-        print("HEY Rahul, EMAIL HAS BEEN SENT SUCCESSFULLY.")
-        server.quit()
-
-    # Now lets send the push notification-------------------------------------------------
-    # Check how push notifications work: https://qr.ae/TWoIb4
-
-    def push_notification():
-        notify = Notify()
-        notify.send(pnmsg)
-        print("HEY Rahul, PUSH NOTIFICATION HAS BEEN SENT SUCCESSFULLY.")
-
-        print("Check again after an hour.")
-
-    count = 0
-    if desired_price >= price:
-        send_mail()
-        push_notification()
+while True:
+    page = r.get(URL)
+    soup = bs(page.content, "html.parser")
     
-    else:
-        count += 1
-        print("Rechecking... Last checked at " + str(datetime.now()))
-        print(count)
-
-count = 0
-while (True):
-    count += 1
-    print("Count : " + str(count))
-    check_price()
-    #next alert in 3600Secs
-    time.sleep(3600)
+    # Use whatever you see in Inspect Element of the website this keeps changing from web page to webpage
+    price = soup.find("div", {"class": "_3qQ9m1"}).text
+    # Uncomment above line if you use Flipkart website
+    
+    # This is used to remove the ₹ symbol and get the price
+    price = price[1:]
+    
+    # This is used to remove the , in between the prices to make it a number
+    price_ar = price.split(",")
+    price = ''.join(price_ar)
+    
+    # Conver the price which is string to an integer to compare
+    price = int(price)
+    
+    print(price)
+    
+    # Use your comparing logic here below
+    # Example:
+    # if price < 11000:
+    # w.open(URL) this opens the web page in a browser
+    # break
